@@ -1,0 +1,18 @@
+/* public/css/mobile.css */
+@media (max-width: 768px) {
+    .header_main {
+      flex-direction: column;
+      align-items: center;
+    }
+    .menu_main ul {
+      flex-direction: column;
+      align-items: center;
+    }
+    .banner_taital {
+      font-size: 24px;
+    }
+    .banner_text {
+      font-size: 14px;
+    }
+  }
+  
