@@ -120,21 +120,14 @@
     <div class="container-fluid">
         <div class="navbar-brand">
             <a href="{{ route('welcome') }}">
-                <img src="{{ asset('images/header/logo 1.png') }}" alt="Logo" />
+                <img src="{{ asset('images/header/favicon2.png') }}" alt="Logo" />
             </a>
         </div>
         <ul class="nav nav-pills">
             <li class="active"><a class="nav-link" href="{{ route('welcome') }}">Home</a></li>
-            <li><a class="nav-link" href="{{ route('booking') }}">Bookings</a></li>
             <li><a class="nav-link" href="{{ route('translator.form') }}">Translator</a></li>
+            <li><a class="nav-link" href="{{ route('') }}">Locator</a></li>
             <li><a class="nav-link" href="{{ route('emergency-assistant') }}">Emergency Assistant</a></li>
-            <li class="dropdown">
-                <a href="javascript:void(0)" class="dropbtn">Travel Journal</a>
-                <ul class="dropdown-content">
-                    <li><a href="{{ route('create-journal') }}">Create Journal</a></li>
-                    <li><a href="{{ route('view-journal') }}">View Journal</a></li>
-                </ul>
-            </li>
             @guest
                 @if (Route::has('login'))
                     <li>

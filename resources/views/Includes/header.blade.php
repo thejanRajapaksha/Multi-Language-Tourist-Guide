@@ -6,7 +6,7 @@
 
         <link rel="manifest" href="{{ asset('manifest.json') }}">
 
-        <title>Zeylan - Explore Sri Lanka with Zeylan</title>
+        <title>MULTI-LANGUAGE-TOURIST-GUIDE</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
@@ -40,6 +40,6 @@
         <link href="{{ asset('css/owl.carousel.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/owl.theme.default.min.css') }}" rel="stylesheet" />
 
-        @livewireStyles
+        <!-- @livewireStyles -->
     </head>
     <body class="antialiased">

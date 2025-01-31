@@ -6,7 +6,7 @@
 
         <link rel="manifest" href="{{ asset('manifest.json') }}">
 
-        <title>Zeylan - Explore Sri Lanka with Zeylan</title>
+        <title>MULTI-LANGUAGE-TOURIST-GUIDE</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
@@ -34,13 +34,23 @@
         <link href="{{ asset('css/responsive.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/jquery.mCustomScrollbar.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/owl.carousel.min.css') }}" rel="stylesheet" />
-        <link href="{{ asset('css/owl.theme.default.min.css') }}" rel="stylesheet" />
 
         @livewireStyles
     </head>
     <body class="antialiased">
 <body>
 @yield('content')
+<!-- <script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,si,ta,fr,de,es,zh',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+</script> -->
+
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
@@ -58,6 +68,8 @@
 <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
 
 @livewireScripts
+
+
 
 </body>
 </html>

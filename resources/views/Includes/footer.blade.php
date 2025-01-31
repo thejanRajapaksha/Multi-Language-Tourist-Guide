@@ -6,9 +6,7 @@
                     <h1 class="text-light fw-bold">Quick Links</h1>
                 </div>
                 <div class="call_text"><a href="{{ route('translator.form') }}">Translator</a></div>
-                <div class="call_text"><a href="{{ route('booking') }}">Booking</a></div>
                 <div class="call_text"><a href="{{ route('emergency-assistant') }}">Emergency Assistant</a></div>
-                <div class="call_text"><a href="{{ route('view-journal') }}">Your Journal</a></div>
                 <div class="call_text"><a href="{{ route('support') }}">Contact Support</a></div>
             </div>
             <div class="social_icon">
@@ -25,7 +23,7 @@
     <!-- copyright section start -->
     <div class="copyright_section">
         <div class="container">
-            <p class="copyright_text">2024 All Rights Reserved. Design by Zeylan Developer Team</p>
+            <p class="copyright_text">10898883 All Rights Reserved. Design by Rajapaksha M Rajapaksha</p>
         </div>
     </div>
     <!-- copyright section end -->

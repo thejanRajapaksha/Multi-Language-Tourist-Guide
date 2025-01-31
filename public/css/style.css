@@ -45,7 +45,7 @@ html {
 body {
     color: #666666;
     font-size: 14px;
-    line-height: 1.80857;
+    line-height: 3;
     font-weight: normal;
     overflow-x: hidden;
     font-family: 'Poppins', sans-serif;
@@ -240,7 +240,7 @@ button {
     width: 100%;
     float: left;
     background-image: url('/images/header/hero/banner-bg1.jpg');
-    height: auto;
+    height: 1000px;
     background-size: 100%;
     padding: 0px 0px 20px 0px;
 }
@@ -309,6 +309,7 @@ button {
 .menu_main ul {
     margin: 0px;
     padding: 0px;
+    font-size: 16px;
     list-style: none;
     display: inline-flex;
 }
@@ -768,7 +769,7 @@ button {
     font-size: 16px;
     color: #1f1f1f;
     margin: 0px;
-    padding-top: 40px;
+    padding-top: 0px;
 }
 
 .readmore_bt {
@@ -1345,7 +1346,7 @@ button {
 
 .video_section {
     width: 100%;
-    height: 60vh; /* Adjust height as needed */
+    height: 100vh; /* Adjust height as needed */
     position: relative;
     overflow: hidden; /* Hides any overflow */
 }
@@ -1578,6 +1579,24 @@ h1 {
     margin-top: 60px; /* Ensure text is not overlapped by button */
 }
 
+#google_translate_element {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 10px;
+}
+
+.goog-te-gadget {
+    color: transparent !important;
+    font-size: 0 !important;
+}
+
+.goog-te-gadget select {
+    font-size: 14px !important;
+    color: #000 !important;
+    background: transparent !important;
+    border: none;
+    cursor: pointer;
+}
 
 
 

@@ -59,7 +59,7 @@
                                 <a class="nav-link" href="{{ route('welcome') }}">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('booking') }}">Bookings</a>
+                                <a class="nav-link" href="{{ route('booking') }}">Map</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('translator.form') }}">Translator</a>
@@ -163,7 +163,7 @@
             <div id="review-form" class="review-form">
                 <button type="button" id="close-form" class="close-button">&times;</button>
                 <div class="logo">
-                    <img class="" src="{{ asset('images/header/logo 1.png') }}" style="width: 50%;" />
+                    <img class="" src="{{ asset('images/header/favicon.png') }}" style="width: 50%;" />
                 </div>
                 <h1 class="about_taital">Your Valuable Feedback</h1>
                 <form action="{{ route('reviews.store') }}" method="POST">
@@ -192,11 +192,26 @@
                 <div class="menu_main">
                     <ul>
                         <li class="active"><a class="nav-link" href="{{ route('welcome') }}">Home</a></li>
+                        <li><a href="{{ route('translator.form') }}">Locator</a></li>
                         <li><a href="{{ route('translator.form') }}">Translator</a></li>
                         <li><a href="{{ route('emergency-assistant') }}">Emergency Assistant</a></li>
-                        
+                        <li><div id="google_translate_element"></div></li>
                     </ul>
                 </div>
+
+                <!-- Google Translate Script -->
+                <script type="text/javascript">
+                    function googleTranslateElementInit() {
+                        new google.translate.TranslateElement({
+                            pageLanguage: 'en',
+                            includedLanguages: 'en,si,ta,fr,de,es,zh',
+                            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                            autoDisplay: false
+                        }, 'google_translate_element');
+                    }
+                </script>
+                <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
             </div>
         </div>
         <!-- banner section start -->
@@ -207,24 +222,23 @@
                     <div class="carousel-item active">
                         <div class="container">
                             <h3 class="banner_taital">{{ $sites->main_topic }}</h3>
-                            <p class="banner_text">{{ $sites->sub_topic }}</p>
-                                <div class="read_bt"><a href="{{ route('trip.plan') }}">Plan Your Trip</a></div>
-                                </div>
+                            <p class="banner_text">{{ $sites->sub_topic }}</p>   
+                        </div>
                     </div>
                     <div class="carousel-item">
                         <div class="container">
                             <h3 class="banner_taital">{{ $sites->main_topic2 }}</h3>
                             <p class="banner_text">{{ $sites->sub_topic2 }}
                             </p>
-                            <div class="read_bt"><a href="{{ route('trip.plan') }}">Plan Your Trip</a></div>
-                            </div>
+                            
+                        </div>
                     </div>
                     <div class="carousel-item">
                         <div class="container">
                             <h3 class="banner_taital">{{ $sites->main_topic3 }}</h3>
                             <p class="banner_text">{{ $sites->sub_topic3 }}</p>
-                                <div class="read_bt"><a href="{{ route('trip.plan') }}">Plan Your Trip</a></div>
-                                </div>
+                                
+                        </div>
                     </div>
                 </div>
                 @endforeach    
@@ -241,8 +255,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="about_taital_main">
-                            <h1 class="about_taital">About Zeylan...</h1>
-                            <p class="about_text">&nbsp;&nbsp;&nbsp;Travelling is becoming more prevalent as a hobby
+                            <h1 class="about_taital">About Multi Language Tourist Guide...</h1>
+                            <p class="about_text">Travelling is becoming more prevalent as a hobby
                                 nowadays. A lot of people
                                 are leading a
                                 busy life with the work life. Therefore, it is becoming a trend to travel to reduce work
@@ -255,20 +269,20 @@
                                 use different apps related to these factors. So that, the different necessities of the
                                 young
                                 generation must be identified to provide a proper solution for this matter. <br><br>
-                                As a solution for this matter, Zeylan: Personalized Travel Assistant will be developed
+                                As a solution for this matter, MLTG: Multi Language Tourist Guide will be developed
                                 to
                                 enhance the travel experience of the young generation. It will be a great platform to
                                 enhance
-                                the travelling. Zeylan is a web-based application and the travel experience of the users
+                                the travelling. MLTG is a web-based application and the travel experience of the users
                                 will be
-                                improved by using the Zeylan web application.</p>
+                                improved by using the MLTG web application.</p>
                         </div>
                     </div>
                     <div class="col-md-6 padding_right_0">
                         <div class="mt-5">
                             @foreach ($site as $index => $sites)
                                 <video class="about_video" width="800" height="450" controls autoplay loop muted>
-                                    <source src="http://127.0.0.1:8001/Videos/about/{{ $sites->about_video }}" type="video/mp4">
+                                <source src="{{ asset('images/Short_video.mp4') }}" type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
                             @endforeach                        
@@ -337,7 +351,7 @@
             <div class="video_container">
                 @foreach ($site as $index => $sites)
                 <video class="video_player" controls autoplay loop muted>
-                    <source src="http://127.0.0.1:8001/Videos/banner/{{ $sites->banner_video }}" type="video/mp4">
+                <source src="{{ asset('images/Long_video.mp4') }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
                 @endforeach   
