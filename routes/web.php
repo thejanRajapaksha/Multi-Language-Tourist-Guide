@@ -80,6 +80,10 @@ Route::get('/emergency-assistant', function () {
     return view('emergency-assistant');
 })->name('emergency-assistant');
 
+Route::get('/locator', function () {
+    return view('locator');
+})->name('locator');
+
 Route::get('/journal/{id}', [ViewJournalController::class, 'showProfile'])->name('journal.detail')->middleware('auth');
 Route::get('/journal-detail/{id}', [ViewJournalController::class, 'showProfile'])->name('journal-detail');
 Route::get('/gallery/{id}', [ViewJournalController::class, 'showGallery'])->name('gallery');

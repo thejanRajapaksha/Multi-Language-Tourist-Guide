@@ -83,6 +83,9 @@
             <div class="container-fluid">
             <div class="menu_main_login text-end">
                 <ul>
+                    <li><div id="google_translate_element"></div></li>
+                </ul>
+                <ul>
                     <!-- Notification Icon -->
                     <!-- Notification Icon with Count Badge -->
                     <li class="mt-1">
@@ -192,10 +195,10 @@
                 <div class="menu_main">
                     <ul>
                         <li class="active"><a class="nav-link" href="{{ route('welcome') }}">Home</a></li>
-                        <li><a href="{{ route('translator.form') }}">Locator</a></li>
+                        <li><a href="{{ route('locator') }}">Locator</a></li>
                         <li><a href="{{ route('translator.form') }}">Translator</a></li>
                         <li><a href="{{ route('emergency-assistant') }}">Emergency Assistant</a></li>
-                        <li><div id="google_translate_element"></div></li>
+                        
                     </ul>
                 </div>
 

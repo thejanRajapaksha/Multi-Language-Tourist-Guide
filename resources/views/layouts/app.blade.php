@@ -40,16 +40,6 @@
     <body class="antialiased">
 <body>
 @yield('content')
-<!-- <script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-            pageLanguage: 'en',
-            includedLanguages: 'en,si,ta,fr,de,es,zh',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false
-        }, 'google_translate_element');
-    }
-</script> -->
 
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

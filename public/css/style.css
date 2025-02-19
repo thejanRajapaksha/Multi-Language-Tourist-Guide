@@ -1591,7 +1591,8 @@ h1 {
 }
 
 .goog-te-gadget select {
-    font-size: 14px !important;
+    font-size: 11px !important;
+    padding: 2px 5px !important;
     color: #000 !important;
     background: transparent !important;
     border: none;
