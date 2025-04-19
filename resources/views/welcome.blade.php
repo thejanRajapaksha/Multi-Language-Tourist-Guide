@@ -198,7 +198,7 @@
                         <li><a href="{{ route('locator') }}">Locator</a></li>
                         <li><a href="{{ route('translator.form') }}">Translator</a></li>
                         <li><a href="{{ route('emergency-assistant') }}">Emergency Assistant</a></li>
-                        
+                        <li><a href="{{ route('spending.index') }}">Create Spending</a></li>
                     </ul>
                 </div>
 

@@ -18,6 +18,23 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            
+            // New columns for Tourist & Business Users
+            $table->string('passport_number')->nullable(); // For tourists
+            $table->string('nationality')->nullable(); // For tourists
+            $table->string('income_method')->nullable(); // For tourists
+            $table->decimal('income_amount', 8, 2)->nullable(); // For tourists
+            $table->string('currency_used')->nullable(); // For tourists
+            $table->string('planned_length_of_stay')->nullable(); // For tourists
+            
+            $table->string('business_type')->nullable(); // For businesses
+            $table->string('business_registration_number')->nullable(); // For businesses
+            $table->string('business_location')->nullable(); // For businesses
+            $table->string('tax_identification_number')->nullable(); // For businesses
+
+            // Keeping role_id to determine user type
+            $table->foreignId('role_id')->default(3); // Default role for all users (1, 2, 3 are user types)
+            
             $table->timestamps();
         });
 

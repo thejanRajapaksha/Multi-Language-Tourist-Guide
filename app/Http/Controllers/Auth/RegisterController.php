@@ -53,9 +53,9 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'user_type' => ['required', 'in:1,2'],  // Tourist (1) or Business (2)
         ]);
     }
 
@@ -68,12 +68,25 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'role_id' => 3,
+            'role_id' => 3,  // Regular user
+            'user_type' => $data['user_type'],  // Tourist or Business
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'passport_number' => isset($data['passport_number']) ? $data['passport_number'] : null,
+            'nationality' => isset($data['nationality']) ? $data['nationality'] : null,
+            'income_method' => isset($data['income_method']) ? $data['income_method'] : null,
+            'income_amount' => isset($data['income_amount']) ? $data['income_amount'] : null,
+            'currency_used' => isset($data['currency_used']) ? $data['currency_used'] : null,
+            'planned_length_of_stay' => isset($data['planned_length_of_stay']) ? $data['planned_length_of_stay'] : null,
+            'business_type' => isset($data['business_type']) ? $data['business_type'] : null,
+            'business_registration_number' => isset($data['business_registration_number']) ? $data['business_registration_number'] : null,
+            'business_location' => isset($data['business_location']) ? $data['business_location'] : null,
+            'tax_identification_number' => isset($data['tax_identification_number']) ? $data['tax_identification_number'] : null,
             'status' => 1
         ]);
+
+        \App\Http\Controllers\MLController::runMLPipeline();
     }
 
     /**

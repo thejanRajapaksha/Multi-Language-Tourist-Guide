@@ -22,7 +22,7 @@
         media="screen">
         <link rel="icon" type="image/x-icon" href="{{ asset('images/header/favicon.png') }}"/>
         <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+        <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"> -->
 
 
 
@@ -38,7 +38,11 @@
         <link href="{{ asset('css/responsive.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/jquery.mCustomScrollbar.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/owl.carousel.min.css') }}" rel="stylesheet" />
-        <link href="{{ asset('css/owl.theme.default.min.css') }}" rel="stylesheet" />
+        <!-- <link href="{{ asset('css/owl.theme.default.min.css') }}" rel="stylesheet" /> -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
 
         <!-- @livewireStyles -->
     </head>

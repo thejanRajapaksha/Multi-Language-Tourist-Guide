@@ -45,9 +45,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Hardcoded tourist places (Can later fetch from database)
     var places = [
-        { name: "Sigiriya", lat: 7.9570, lng: 80.7603, description: "Ancient rock fortress with breathtaking views.", 'icon' => 'sigiriya.png' },
-        { name: "Temple of the Tooth", lat: 7.2936, lng: 80.6411, description: "Sacred Buddhist temple in Kandy.", 'icon' => 'temple.png' },
-        { name: "Galle Fort", lat: 6.0269, lng: 80.2170, description: "Historic Dutch fort with colonial architecture.", 'icon' => 'fort.png' }
+        { name: "Sigiriya", lat: 7.9570, lng: 80.7603, description: "Ancient rock fortress with breathtaking views.", 'icon' : 'sigiriya.png' },
+        { name: "Temple of the Tooth", lat: 7.2936, lng: 80.6411, description: "Sacred Buddhist temple in Kandy.", 'icon' : 'temple.png' },
+        { name: "Galle Fort", lat: 6.0269, lng: 80.2170, description: "Historic Dutch fort with colonial architecture.", 'icon' : 'fort.png' }
     ];
 
     // Add markers for places
