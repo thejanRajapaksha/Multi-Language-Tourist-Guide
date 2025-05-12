@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
@@ -67,27 +68,44 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'role_id' => 3,  // Regular user
-            'user_type' => $data['user_type'],  // Tourist or Business
+        $user = User::create([
+            'role_id' => 3,
+            'user_type' => $data['user_type'],
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'passport_number' => isset($data['passport_number']) ? $data['passport_number'] : null,
-            'nationality' => isset($data['nationality']) ? $data['nationality'] : null,
-            'income_method' => isset($data['income_method']) ? $data['income_method'] : null,
-            'income_amount' => isset($data['income_amount']) ? $data['income_amount'] : null,
-            'currency_used' => isset($data['currency_used']) ? $data['currency_used'] : null,
-            'planned_length_of_stay' => isset($data['planned_length_of_stay']) ? $data['planned_length_of_stay'] : null,
-            'business_type' => isset($data['business_type']) ? $data['business_type'] : null,
-            'business_registration_number' => isset($data['business_registration_number']) ? $data['business_registration_number'] : null,
-            'business_location' => isset($data['business_location']) ? $data['business_location'] : null,
-            'tax_identification_number' => isset($data['tax_identification_number']) ? $data['tax_identification_number'] : null,
+            'passport_number' => $data['passport_number'] ?? null,
+            'nationality' => $data['nationality'] ?? null,
+            'income_method' => $data['income_method'] ?? null,
+            'income_amount' => $data['income_amount'] ?? null,
+            'currency_used' => $data['currency_used'] ?? null,
+            'planned_length_of_stay' => $data['planned_length_of_stay'] ?? null,
+            'business_type' => $data['business_type'] ?? null,
+            'business_registration_number' => $data['business_registration_number'] ?? null,
+            'business_location' => $data['business_location'] ?? null,
+            'tax_identification_number' => $data['tax_identification_number'] ?? null,
             'status' => 1
         ]);
 
+        if ($user->user_type == 1) {
+            $csvLine = [
+                $user->passport_number,
+                $user->nationality,
+                $user->planned_length_of_stay,
+                $user->income_method,
+                $user->income_amount,
+                $user->currency_used
+            ];
+            $csvString = implode(',', $csvLine) . "\n";
+            $filePath = storage_path('app/python-input/tourists.csv');
+            file_put_contents($filePath, $csvString, FILE_APPEND);
+        }
+
         \App\Http\Controllers\MLController::runMLPipeline();
+
+        return $user;
     }
+
 
     /**
      * Handle a registration request for the application.

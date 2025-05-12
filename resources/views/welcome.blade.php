@@ -62,19 +62,7 @@
                                 <a class="nav-link" href="{{ route('booking') }}">Map</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('translator.form') }}">Translator</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('emergency-assistant') }}">Emergency Assistant</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Travel Journal
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('create-journal') }}">Create Journal</a>
-                                    <a class="dropdown-item" href="{{ route('view-journal') }}">View Journal</a>
-                                </div>
                             </li>
                         </ul>
                     </div>
@@ -196,9 +184,13 @@
                     <ul>
                         <li class="active"><a class="nav-link" href="{{ route('welcome') }}">Home</a></li>
                         <li><a href="{{ route('locator') }}">Locator</a></li>
-                        <li><a href="{{ route('translator.form') }}">Translator</a></li>
                         <li><a href="{{ route('emergency-assistant') }}">Emergency Assistant</a></li>
                         <li><a href="{{ route('spending.index') }}">Create Spending</a></li>
+                        @auth
+                            @if (Auth::user()->role_id == 1)
+                                <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                            @endif
+                        @endauth
                     </ul>
                 </div>
 

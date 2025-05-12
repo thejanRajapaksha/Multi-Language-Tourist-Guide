@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Spending;
+use Illuminate\Support\Facades\Storage;
+
 
 class SpendingController extends Controller
 {
@@ -31,7 +33,7 @@ class SpendingController extends Controller
             'tax_included' => 'required|numeric',
         ]);
 
-        Spending::create([
+        $record = Spending::create([
             'passport_number' => $request->passport_number,
             'business_id' => Auth::id(),
             'business_category' => $request->business_category,
@@ -40,6 +42,19 @@ class SpendingController extends Controller
             'tax_included' => $request->tax_included,
             'spending_date' => today(),
         ]);
+
+        $csvLine = [
+            $record->passport_number,
+            $record->business_category,
+            $record->spending_category,
+            $record->spending_amount,
+            $record->tax_included == 0 ? 'Yes' : 'No',
+            $record->spending_date->format('Y/m/d')
+        ];
+        $csvString = implode(',', $csvLine) . "\n";
+        // \Log::info('Attempting to write to CSV', ['line' => $csvString]);
+        $filePath = storage_path('app/python-input/business_records.csv');
+        file_put_contents($filePath, $csvString, FILE_APPEND);
 
         \App\Http\Controllers\MLController::runMLPipeline();
 

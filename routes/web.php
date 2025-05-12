@@ -4,9 +4,10 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\SpendingController;
+use App\Http\Controllers\DashboardController;
 // use App\Http\Controllers\TranslationController;
 // use App\Http\Controllers\HotelController;
-// use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ReviewController;
 // use App\Http\Controllers\JournalController;
 // use App\Http\Controllers\ViewJournalController;
 // use App\Http\Controllers\PlaceController;
@@ -117,3 +118,7 @@ Route::get('/view-journal', [JournalController::class, 'index'])->name('view-jou
 
 Route::get('/spending', [SpendingController::class, 'index'])->name('spending.index')->middleware('auth');
 Route::post('/spending/store', [SpendingController::class, 'store'])->name('spending.store')->middleware('auth');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});

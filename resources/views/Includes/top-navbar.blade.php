@@ -125,10 +125,14 @@
         </div>
         <ul class="nav nav-pills">
             <li class="active"><a class="nav-link" href="{{ route('welcome') }}">Home</a></li>
-            <li><a class="nav-link" href="{{ route('translator.form') }}">Translator</a></li>
             <li><a class="nav-link" href="{{ route('locator') }}">Locator</a></li>
             <li><a class="nav-link" href="{{ route('emergency-assistant') }}">Emergency Assistant</a></li>
-            
+            <li><a class="nav-link" href="{{ route('spending.index') }}">Create Spending</a></li>
+            @auth
+                @if (Auth::user()->role_id == 1)
+                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                @endif
+            @endauth
 
             @guest
                 @if (Route::has('login'))
