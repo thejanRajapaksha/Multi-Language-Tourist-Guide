@@ -1,1 +1,1 @@
-{"regression_r2": 0.0, "arima_forecast_total": 8171879.76, "tax_included": 0, "tax_excluded": 0, "top_country": "Australia", "cluster_count": 3}
+{"regression_r2": 0.0, "arima_forecast_total": 8171879.76, "arima_accuracy": 237116.93, "tax_included": 4808226.3, "tax_excluded": 4764345.06, "tax_period": "2024-10-29 to 2025-04-29", "top_country": "Australia", "cluster_count": 3}

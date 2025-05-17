@@ -25,13 +25,17 @@ class DashboardController extends Controller
     }
 
     $graphs = [
-        asset('ml_graphs/regression_spending_prediction.png'),
+        
         asset('ml_graphs/arima_spending_forecast.png'),
         asset('ml_graphs/spending_clusters.png'),
         asset('ml_graphs/tourist_clusters_total_spending.png'),
         asset('ml_graphs/income_vs_spending.png'),
         asset('ml_graphs/tax_included_comparison.png'),
         asset('ml_graphs/countrywise_spending.png'),
+        asset('ml_graphs/bar_spending_category.png'),
+        asset('ml_graphs/line_monthly_spending.png'),
+        asset('ml_graphs/pie_spending_category.png'),
+
     ];
 
     return view('government.dashboard', compact('analysis', 'graphs'));

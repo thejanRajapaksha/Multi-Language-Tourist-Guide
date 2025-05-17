@@ -10,6 +10,8 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import r2_score
 from statsmodels.tsa.arima.model import ARIMA
 import statsmodels.api as sm
+import xgboost as xgb
+from sklearn.metrics import root_mean_squared_error, mean_absolute_error
 
 # Define BASE_DIR manually for compatibility
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,34 +23,52 @@ os.makedirs(output_dir, exist_ok=True)
 # Load datasets
 tourists_df = pd.read_csv(tourists_csv)
 spending_df = pd.read_csv(spending_csv)
-spending_df["date_time"] = pd.to_datetime(spending_df["date_time"])
+spending_df["date_time"] = pd.to_datetime(spending_df["date_time"], errors="coerce")
 merged_df = pd.merge(spending_df, tourists_df, on="passport_number", how="left")
 merged_df["stay_duration_days"] = pd.to_numeric(merged_df["stay_duration_days"], errors="coerce")
 
 # Save processed data
 merged_df.to_csv(os.path.join(output_dir, "processed_data.csv"), index=False)
 
-# REGRESSION
+# Select relevant X and Y variable, dropping any rows with missing values
 X = merged_df[["stay_duration_days", "income_amount"]].dropna()
-y = merged_df.loc[X.index, "spending_amount"]
-r2 = None
+Y = merged_df.loc[X.index, "spending_amount"]
 
-if not X.empty and not y.empty:
-    model = LinearRegression()
-    model.fit(X, y)
+r2 = None  # Initialize R² score
+
+if not X.empty and not Y.empty:
+    # Initialize and train the linear regression model
+    model = xgb.XGBRegressor(objective='reg:squarederror', random_state=42)
+    model.fit(X, Y)
+
+    # Make predictions
     predictions = model.predict(X)
 
-    plt.figure(figsize=(6, 4))
-    plt.scatter(y, predictions, alpha=0.6)
-    plt.xlabel("Actual Spending")
-    plt.ylabel("Predicted Spending")
-    plt.title("Regression: Actual vs Predicted Spending")
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, "regression_spending_prediction.png"))
+    # Sort values by index for line plot continuity
+    sorted_indices = np.argsort(Y.index)
+    sorted_actual = Y.iloc[sorted_indices].values
+    sorted_predicted = predictions[sorted_indices]
 
-    r2 = r2_score(y, predictions)
+    # Line plot of actual and predicted spending
+    plt.figure(figsize=(8, 5))
+    plt.plot(sorted_actual, label="Actual Spending", linewidth=2)
+    plt.plot(sorted_predicted, label="Predicted Spending", linewidth=2, linestyle='--')
+    plt.xlabel("Record Index (sorted)")
+    plt.ylabel("Spending Amount")
+    plt.title("Regression: Actual vs Predicted Spending (Line Plot)")
+    plt.legend()
+    plt.tight_layout()
+
+    # Save the plot
+    plot_path = os.path.join(output_dir, "regression_spending_prediction_lineplot.png")
+    plt.savefig(plot_path)
+    plt.close()
+
+    # Calculate and print R² score
+    r2 = r2_score(Y, predictions)
+    print(f"Regression completed. R² Score: {r2:.4f}")
 else:
-    print("Skipping regression: no valid data")
+    print("Skipping regression: insufficient valid data.")
 
 # TIME SERIES (ARIMA)
 try:
@@ -56,6 +76,15 @@ try:
     monthly_series = ts_df["spending_amount"].resample("M").sum()
     arima_model = ARIMA(monthly_series, order=(5, 1, 0)).fit()
     forecast = arima_model.forecast(steps=6)
+
+    # Train-test split (last 6 months for testing)
+    train = monthly_series[:-6]
+    test = monthly_series[-6:]
+
+    # Compute metrics
+    mae = mean_absolute_error(test, forecast)
+    rmse = root_mean_squared_error(test, forecast)
+    mape = np.mean(np.abs((test - forecast) / test)) * 100
 
     plt.figure(figsize=(10, 4))
     monthly_series.plot(label="Actual", color="blue")
@@ -116,49 +145,121 @@ try:
     plt.title("Impact of Tourist Income on Spending")
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, "income_vs_spending.png"))
+
+    # Calculate and print R² score
+    r2 = r2_score(y_spent, predictions)
+    print(f"Regression completed. R² Score: {r2:.4f}")
+
 except Exception as e:
     print("Skipping income vs spending regression:", e)
 
-# TAX COMPARISON
+# TAX COMPARISON (LAST 6 MONTHS)
 try:
-    tax_summary = merged_df.groupby("tax_included")["spending_amount"].sum().reset_index()
+    # Get the most recent date in your dataset
+    latest_date = merged_df['date_time'].max()
+    
+    # Calculate the date 6 months prior to the latest date
+    six_months_ago = latest_date - pd.DateOffset(months=6)
+    
+    # Filter data for the last 6 months
+    last_six_months = merged_df[merged_df['date_time'] >= six_months_ago]
+    
+    # Convert "Yes"/"No" to 1/0 for consistent grouping
+    last_six_months['tax_numeric'] = last_six_months['tax_included'].map({'Yes': 1, 'No': 0})
+    
+    tax_summary = last_six_months.groupby("tax_numeric")["spending_amount"].sum().reset_index()
+    
+    # Create mapping for visualization labels
+    tax_labels = {1: "Yes", 0: "No"}
+    tax_summary['tax_label'] = tax_summary['tax_numeric'].map(tax_labels)
+    
     plt.figure(figsize=(6, 4))
-    sns.barplot(x="tax_included", y="spending_amount", data=tax_summary, palette=["red", "green"])
+    sns.barplot(x="tax_label", y="spending_amount", data=tax_summary,
+                hue="tax_label", palette={"No": "red", "Yes": "green"})
     plt.xlabel("Was Tax Included?")
     plt.ylabel("Total Spending (LKR)")
-    plt.title("Spending: Tax Included vs Excluded")
+    plt.title("Spending: Tax Included vs Excluded (Last 6 Months)")
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, "tax_included_comparison.png"))
-
-    tax_data = tax_summary.set_index("tax_included")["spending_amount"].to_dict()
+    plt.savefig(os.path.join(output_dir, "tax_included_comparison_last6months.png"))
+    
+    # Create dictionary with numeric keys for the summary
+    tax_data = tax_summary.set_index("tax_numeric")["spending_amount"].to_dict()
+    tax_period_str = f"{six_months_ago.date()} to {latest_date.date()}"
+    
+    # Print debug info
+    print(f"Tax data for last 6 months ({six_months_ago.date()} to {latest_date.date()}):")
+    print(tax_summary)
 except Exception as e:
-    print("Skipping tax comparison:", e)
+    print("Skipping tax comparison for last 6 months:", e)
     tax_data = {0: 0, 1: 0}
 
 # COUNTRY-WISE SPENDING
 top_country = "N/A"
+
 if "country" in merged_total.columns:
     try:
-        country_spending = merged_total.groupby("country")["total_spent"].sum().reset_index()
+        # Remove 'Sri Lanka' rows
+        filtered_df = merged_total[merged_total["country"].str.strip().str.lower() != "sri lankan"]
+
+        country_spending = filtered_df.groupby("country")["total_spent"].sum().reset_index()
         if not country_spending.empty:
             top_country = country_spending.sort_values("total_spent", ascending=False).iloc[0]["country"]
+
         plt.figure(figsize=(8, 5))
         sns.barplot(x="country", y="total_spent", data=country_spending, palette="Blues")
         plt.xlabel("Country")
         plt.ylabel("Total Spending")
-        plt.title("Spending by Country")
+        plt.title("Spending by Country (Excluding Sri Lanka)")
         plt.xticks(rotation=45)
         plt.tight_layout()
         plt.savefig(os.path.join(output_dir, "countrywise_spending.png"))
+
     except Exception as e:
         print("Skipping country-wise spending:", e)
+
+# Monthly Spending Trends
+merged_df["date_time"] = pd.to_datetime(merged_df["date_time"])
+monthly_spending = merged_df.resample("M", on="date_time")["spending_amount"].sum()
+
+plt.figure(figsize=(10, 5))
+monthly_spending.plot(marker='o', linestyle='-', color='purple')
+plt.xlabel("Month")
+plt.ylabel("Total Spending (LKR)")
+plt.title("Monthly Spending Trends")
+plt.grid(True)
+plt.tight_layout()
+plt.savefig(os.path.join(output_dir, "line_monthly_spending.png"))
+plt.close()
+
+# Spending Distribution by Business Category
+category_spending = merged_df.groupby("business_category")["spending_amount"].sum()
+plt.figure(figsize=(8, 6))
+category_spending.plot.pie(autopct='%1.1f%%', startangle=140, shadow=True)
+plt.ylabel('')
+plt.title("Spending Distribution by Business Category")
+plt.tight_layout()
+plt.savefig(os.path.join(output_dir, "pie_spending_category.png"))
+plt.close()
+
+# Compare Spending Across Categories
+plt.figure(figsize=(10, 6))
+sns.barplot(x=category_spending.index, y=category_spending.values, palette="Set2")
+plt.xlabel("Business Category")
+plt.ylabel("Total Spending (LKR)")
+plt.title("Total Spending by Business Category")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig(os.path.join(output_dir, "bar_spending_category.png"))
+plt.close()
 
 # ANALYSIS SUMMARY JSON
 analysis_summary = {
     "regression_r2": round(r2, 2) if r2 is not None else "N/A",
     "arima_forecast_total": round(forecast_total, 2),
+    "arima_accuracy": round(rmse, 2),
     "tax_included": round(tax_data.get(1, 0), 2),
     "tax_excluded": round(tax_data.get(0, 0), 2),
+    "tax_period": tax_period_str,
     "top_country": top_country,
     "cluster_count": cluster_count
 }
