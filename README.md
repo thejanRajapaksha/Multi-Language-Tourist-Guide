@@ -1,103 +1,56 @@
-🌐 Live Demo
-You can view the live deployed version of the project here:
-https://16.171.148.2/
+# 🌍 Multi-Language Tourist Guide with Predictive Analysis of Tourist Spending and Tax Contributions in Sri Lanka
 
-🛠️ Project Setup Instructions – Multi-Language Tourist Guide
-🔧 Prerequisites
-Ensure the following are installed on your system:
+A full-stack Laravel + Python-based system that helps tourists navigate Sri Lanka using multilingual support while capturing their spending behavior and predicting tax contributions using machine learning.
 
-XAMPP (PHP & MySQL)
+---
 
-Composer
+## 🌐 Live Preview
+👉 [**View the Hosted Project**](https://16.171.148.2/)
 
-Python (>= 3.7)
+---
 
-Git (if composer tries to download packages from source)
+## 🧰 Technologies Used
 
-📦 Laravel Setup Instructions
-Navigate to the project directory
+- **Laravel** (PHP Framework)
+- **MySQL** (Database)
+- **Python 3** with:
+  - `pandas`
+  - `scikit-learn`
+  - `matplotlib`
+  - `seaborn`
+- **Google Translate API**
+- **OpenStreetMap + Leaflet.js**
+- **Bootstrap 5** (UI)
 
-bash
-Copy
-Edit
-cd Multi-Language-Tourist-Guide
-Install PHP dependencies using Composer
+---
 
-bash
-Copy
-Edit
-composer install
-If you see errors related to missing zip, ensure:
+## 🚀 Features
 
-PHP zip extension is enabled in php.ini
+- Multi-language interface for tourists  
+- Tourist and business user registration  
+- Business users can report tourist spendings + tax status  
+- Government dashboard with real-time graphs  
+- Predictive machine learning for spending and tax  
+- Auto-triggered ML script on data entry  
 
-Git is added to your system’s PATH
+---
 
-Copy .env file
+## ⚙️ Local Setup Instructions
 
-bash
-Copy
-Edit
-cp .env.example .env
-Generate application key
+### 1. 📥 Clone the Repository
+    git clone https://github.com/your-username/multi-language-tourist-guide.git
+    cd multi-language-tourist-guide
 
-bash
-Copy
-Edit
-php artisan key:generate
-Set up the database
+### 2. 🧱 Laravel Installation
+    composer install
+    cp .env.example .env
+    php artisan key:generate
 
-Create a new MySQL database (e.g., tourist_guide)
+### 3. Update .env with your local DB:
+    DB_DATABASE=your_database
+    DB_USERNAME=your_user
+    DB_PASSWORD=your_password
 
-Update the .env file with your DB credentials:
-
-env
-Copy
-Edit
-DB_DATABASE=tourist_guide
-DB_USERNAME=root
-DB_PASSWORD=
-Run database migrations (if needed)
-
-bash
-Copy
-Edit
-php artisan migrate
-Start the Laravel server (local only)
-
-bash
-Copy
-Edit
-php artisan serve
-🧠 Machine Learning Setup (Python)
-Navigate to the ML directory
-
-bash
-Copy
-Edit
-cd ml
-Install required Python packages
-Run the following commands in the terminal:
-
-bash
-Copy
-Edit
-pip install pandas
-pip install matplotlib
-pip install scikit-learn
-pip install statsmodels
-pip install xgboost
-Run the ML script
-
-bash
-Copy
-Edit
-python ml_model.py
-🌍 Deployment Notes (for AWS or Remote Access)
-If you plan to access this Laravel app from the internet (e.g., via AWS EC2):
-
-Ensure ports (e.g., 80, 443, 8000) are open in your EC2 Security Group
-
-Point your Laravel app to use Apache or Nginx (not php artisan serve) for production
-
-(Optional) Set up a domain and SSL using Let's Encrypt or another provider
+### 4. Run:
+    php artisan migrate
+    php artisan serve
