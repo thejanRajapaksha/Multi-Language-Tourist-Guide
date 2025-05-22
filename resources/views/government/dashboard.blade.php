@@ -40,9 +40,9 @@
                 <div class="card mb-4 p-3 shadow-sm">
                     <h4>Forecast Summary</h4>
                     <ul>
-                        <li><strong>Regression R² Score:</strong> {{ $analysis['regression_r2'] }}</li>
+                        <!-- <li><strong>Regression R² Score:</strong> {{ $analysis['regression_r2'] }}</li> -->
                         <li><strong>Forecast Total (Next 6 Months):</strong> LKR {{ number_format($analysis['arima_forecast_total'], 2) }}</li>
-                        <li><strong>Arima Accuracy:</strong> {{ $analysis['arima_accuracy'] }}</li>
+                        <li><strong>On average, forecasts deviate from actual values by </strong> {{ $analysis['arima_accuracy'] }} %</li>
                     </ul>
                 </div>
             @endif
@@ -119,9 +119,9 @@
                 <div class="col-md-6 mb-3">
                     <img src="{{ $graphs[6] }}" alt="Bar Spending by Category" class="img-fluid rounded shadow-sm">
                 </div>
-                <div class="col-md-6 mb-3">
+                <!-- <div class="col-md-6 mb-3">
                     <img src="{{ $graphs[8] }}" alt="Pie Spending by Category" class="img-fluid rounded shadow-sm">
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

@@ -74,29 +74,49 @@ else:
 try:
     ts_df = spending_df.set_index("date_time")
     monthly_series = ts_df["spending_amount"].resample("M").sum()
-    arima_model = ARIMA(monthly_series, order=(5, 1, 0)).fit()
-    forecast = arima_model.forecast(steps=6)
 
     # Train-test split (last 6 months for testing)
     train = monthly_series[:-6]
     test = monthly_series[-6:]
 
-    # Compute metrics
-    mae = mean_absolute_error(test, forecast)
-    rmse = root_mean_squared_error(test, forecast)
-    mape = np.mean(np.abs((test - forecast) / test)) * 100
+    # Fit ARIMA model on training data
+    arima_model = ARIMA(train, order=(0, 0, 1)).fit()
+    forecast_test = arima_model.forecast(steps=6)
+    forecast_test.index = test.index
 
-    plt.figure(figsize=(10, 4))
+    # Compute MAE, RMSE, MAPE
+    mae = mean_absolute_error(test, forecast_test)
+    rmse = root_mean_squared_error(test, forecast_test)
+
+    if (test == 0).any():
+        nonzero_mask = test != 0
+        mape = np.mean(np.abs((test[nonzero_mask] - forecast_test[nonzero_mask]) / test[nonzero_mask])) * 100 \
+            if nonzero_mask.sum() > 0 else "N/A"
+    else:
+        mape = np.mean(np.abs((test - forecast_test) / test)) * 100
+
+    # Re-train on full data for next 6-month forecast
+    final_model = ARIMA(monthly_series, order=(0, 0, 1)).fit()
+    forecast_next6 = final_model.forecast(steps=6)
+
+    # Create combined plot
+    plt.figure(figsize=(10, 5))
     monthly_series.plot(label="Actual", color="blue")
-    forecast.plot(label="Forecast", linestyle="--", color="red")
+    forecast_test.plot(label="Predicted Last 6 Months", color="orange", linestyle="--")
+    forecast_next6.index = pd.date_range(start=monthly_series.index[-1] + pd.offsets.MonthBegin(1), periods=6, freq="M")
+    forecast_next6.plot(label="Forecast Next 6 Months", color="green", linestyle="--")
     plt.legend()
-    plt.title("6-Month Spending Forecast (ARIMA)")
+    plt.title("Spending Forecast: Past vs Future (ARIMA)")
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, "arima_spending_forecast.png"))
-    forecast_total = float(forecast.sum())
+    plt.close()
+
+    forecast_total = float(forecast_next6.sum())  # Only future forecast total
 except Exception as e:
     print("Skipping ARIMA forecast:", e)
     forecast_total = 0.0
+    mape = "N/A"
+
 
 # CLUSTERING: Tourists by Spending
 X_cluster = merged_df[["stay_duration_days", "income_amount", "spending_amount"]].dropna()
@@ -147,8 +167,8 @@ try:
     plt.savefig(os.path.join(output_dir, "income_vs_spending.png"))
 
     # Calculate and print R² score
-    r2 = r2_score(y_spent, predictions)
-    print(f"Regression completed. R² Score: {r2:.4f}")
+    # r2 = r2_score(y_spent, predictions)
+    # print(f"Regression completed. R² Score: {r2:.4f}")
 
 except Exception as e:
     print("Skipping income vs spending regression:", e)
@@ -256,7 +276,7 @@ plt.close()
 analysis_summary = {
     "regression_r2": round(r2, 2) if r2 is not None else "N/A",
     "arima_forecast_total": round(forecast_total, 2),
-    "arima_accuracy": round(rmse, 2),
+    "arima_accuracy": round(mape, 2),
     "tax_included": round(tax_data.get(1, 0), 2),
     "tax_excluded": round(tax_data.get(0, 0), 2),
     "tax_period": tax_period_str,
