@@ -46,11 +46,15 @@ A full-stack Laravel + Python-based system that helps tourists navigate Sri Lank
     cp .env.example .env
     php artisan key:generate
 
-### 3. Update .env with your local DB:
+### 3. Python libraries Installation
+    pip install pandas scikit-learn matplotlib seaborn numpy
+    pip install statsmodels
+
+### 4. Update .env with your local DB:
     DB_DATABASE=your_database
     DB_USERNAME=your_user
     DB_PASSWORD=your_password
 
-### 4. Run:
+### 5. Run:
     php artisan migrate
     php artisan serve
